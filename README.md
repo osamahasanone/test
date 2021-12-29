@@ -25,13 +25,13 @@ For more information about AWS CLI installation, please check this [link](https:
    
    * Linux:
      
-     a. Download and install [Homebrew](https://docs.brew.sh/Homebrew-on-Linux).
+     a. Download and install [Homebrew](https://docs.brew.sh/Homebrew-on-Linux):
         
      ```
      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
      ```
         
-     b. Add Homebrew to your PATH and to your bash shell profile script.
+     b. Add Homebrew to your PATH and to your bash shell profile script:
         
      ```
      test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
@@ -48,99 +48,121 @@ For more information about AWS CLI installation, please check this [link](https:
 
    * Windows:
     
-     1. Install chocolatey https://chocolatey.org/install:
+     a. Install chocolatey [](https://chocolatey.org/install):
 
-```
-powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
-```
+     ```
+     powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
+     ```
 		
-     2. Install saml2aws:
-  
-```
-choco install saml2aws
-```
-
-To make sure you have saml2aws successfully installed:	
-
-```
-saml2aws --version
-```	
-
-For more information about saml2aws installation, please check this [link](https://github.com/Versent/saml2aws).
+     b. Install saml2aws:
+     ```
+     choco install saml2aws
+     ```
+     
+     To make sure you have saml2aws successfully installed:
+     
+     ```
+     saml2aws --version
+     ```
+     
+     For more information about saml2aws installation, please check this [link](https://github.com/Versent/saml2aws).
 
 3. Configure a new IDP account (replace firstname and lastname with yours):
-
-```
-saml2aws configure \
-  --idp-account tier-sandbox \
-  --idp-provider=Okta \
-  --username=firstname.lastname@tier.app \
-  --url=https://okta.tier-services.io/home/amazon_aws/0oa2vbiihzhrlCRur0i7/272 \
-  --skip-prompt \
-  --mfa=OKTA \
-  --role=arn:aws:iam::199745669981:role/TM-cross-account-admin \
-  --session-duration=7200 \
-  --profile=TM-cross-account-admin \
-  --region=eu-central-1
-```
-
-on Windows, replace '\' with ';'
-
+   ```
+   saml2aws configure \
+   --idp-account tier-sandbox \
+   --idp-provider=Okta \
+   --username=firstname.lastname@tier.app \
+   --url=https://okta.tier-services.io/home/amazon_aws/0oa2vbiihzhrlCRur0i7/272 \
+   --skip-prompt \
+   --mfa=OKTA \
+   --role=arn:aws:iam::199745669981:role/TM-cross-account-admin \
+   --session-duration=7200 \
+   --profile=TM-cross-account-admin \
+   --region=eu-central-1
+   ```
+   
+   on Windows, replace '\\' with ';'
 
 4. Set defaul AWS region as environment variable:
-	Linux:
+   
+   * Linux:
+     
+     ```
+     export AWS_DEFAULT_REGION="eu-central-1"
+     ```
+     
+   * Windows:
+     
+     ```
+     $env:AWS_DEFAULT_REGION="eu-central-1"
+     ```
+     
+5. Login to AWS:
+   
+   ```
+   saml2aws login --idp-account tier-sandbox
+   ```
+   
+    A verification code will be sent to your okta verify mobile application.
 
-		export AWS_DEFAULT_REGION="eu-central-1"
-	
-	Windows:
-	
-		$env:AWS_DEFAULT_REGION="eu-central-1"
-
-5. login to AWS:
-
-	saml2aws login --idp-account tier-sandbox
-
-	A verification code will be sent to your okta verify mobile application.
-
-6. set AWS default profile:
-	
-	Linux:
-
-		export AWS_PROFILE=TM-cross-account-admin
- 	
-	Windows:
-
-		$env:AWS_PROFILE="TM-cross-account-admin"
-
+6. Set AWS default profile:
+   
+   * Linux:
+     
+     ```
+     export AWS_PROFILE=TM-cross-account-admin
+     ```
+   * Windows:
+     
+     ```
+     $env:AWS_PROFILE="TM-cross-account-admin"
+     ```
+     
 7. Add some environment variables related to AWS account:
+   
+   * Linux:
+     
+     ```
+     eval $(saml2aws script --idp-account="tier-sandbox")
+     ```
 	
-	Linux:
-
-		eval $(saml2aws script --idp-account="tier-sandbox")
-	
-	Windows:
-
-		$Commands = $(saml2aws script --idp-account="tier-sandbox" --shell=powershell)
-		foreach ($Command in $Commands){
-    			if ($Command -ne ""){
-        			Invoke-Expression $Command
-    			}
-		}
-
-
+   * Windows Powershel ISE:
+   
+     ```
+     $Commands = $(saml2aws script --idp-account="tier-sandbox" --shell=powershell)
+     foreach ($Command in $Commands){
+     	if ($Command -ne ""){
+     		Invoke-Expression $Command
+    	}
+     }
 
 8. Set CODEARTIFACT_TOKEN environment variable:
-	
-	Linux:
+   
+   * Linux:
+     ```
+     export CODEARTIFACT_TOKEN="$(aws codeartifact get-authorization-token --domain tier --domain-owner 373437620866 --query authorizationToken --output text)"
+     ```
 
-		export CODEARTIFACT_TOKEN="$(aws codeartifact get-authorization-token --domain tier --domain-owner 373437620866 --query authorizationToken --output text)"
-	
-	Windows Powershell ISE:
-	
-		$env:CODEARTIFACT_TOKEN="$(aws codeartifact get-authorization-token --domain tier --domain-owner 373437620866 --query authorizationToken --output text)"	
-	
-9. git clone https://github.com/TierMobility/pricing-services.git
+   * Windows Powershell ISE:
 
-10. docker-compose build --build-arg CODEARTIFACT_TOKEN=$CODEARTIFACT_TOKEN
+     ```
+     $env:CODEARTIFACT_TOKEN="$(aws codeartifact get-authorization-token --domain tier --domain-owner 373437620866 --query authorizationToken --output text)"	
+     ```
+     
+9. Clone the repository:
+   ```
+   git clone https://github.com/TierMobility/pricing-services.git
+   ```
 
-11. docker-compose up
+10. Build Docker images:
+
+    ```
+    docker-compose build --build-arg CODEARTIFACT_TOKEN=$CODEARTIFACT_TOKEN
+    ```
+    
+11. Run Docker containers
+
+    ```
+    docker-compose up
+    ```
