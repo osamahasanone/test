@@ -1,60 +1,76 @@
 1. Install AWS Command Line Interface (CLI):
-	 * Linux:	
-    ```
-		curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-		unzip awscliv2.zip
-		sudo ./aws/install
-    ```
-	 * Windows:
-		```
-		msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
-		```	
-    To make sure you have aws successfully installed:	  
-    ```
-	  aws --version
-    ``` 
-    For more information about AWS CLI installation, please check this [link](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
-2. Install saml2aws:
-   you need this CLI tool to login and generate AWS temporary credintials using a SAML IDP.
-	 * Linux:
-     1. Download and install [Homebrew](https://docs.brew.sh/Homebrew-on-Linux).
+   
+   * Linux:
+   
+   ```
+   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   unzip awscliv2.zip
+   sudo ./aws/install
+   ```
+	   
+   * Windows:
+	   
+   ```
+   msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
+   ```	
+	   
+   To make sure you have aws successfully installed:	  
+   ```
+   aws --version
+   ``` 
+
+For more information about AWS CLI installation, please check this [link](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+2. Install saml2aws: you need this CLI tool to login and generate AWS temporary credintials using a SAML IDP.
+   
+   * Linux:
+     
+     a. Download and install [Homebrew](https://docs.brew.sh/Homebrew-on-Linux).
         
-        ```
-			 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-			  ```
+     ```
+     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+     ```
         
-     2. Add Homebrew to your PATH and to your bash shell profile script.
+     b. Add Homebrew to your PATH and to your bash shell profile script.
         
-        ```
-			 test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-			 test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-			 test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >>~/.bash_profile
-			 echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >>~/.profile
-		    ```
+     ```
+     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+     test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >>~/.bash_profile
+     echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >>~/.profile
+     ```
         
-     3. Install saml2aws:  
-        ```
-			  brew install saml2aws
-	      ```    
-  * Windows:
-		1. Install chocolatey https://chocolatey.org/install:
-			```
-			powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
-	    ```
-		2. Install saml2aws:
-      ```
-			choco install saml2aws
-      ```
-  For more information about saml2aws installation, please check this [link](https://github.com/Versent/saml2aws).
-	
+     c. Install saml2aws:  
+
+     ```
+     brew install saml2aws
+     ```    
+
+   * Windows:
+    
+     1. Install chocolatey https://chocolatey.org/install:
+
+```
+powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
+```
+		
+     2. Install saml2aws:
+  
+```
+choco install saml2aws
+```
+
 To make sure you have saml2aws successfully installed:	
-	
-	saml2aws --version
-	
+
+```
+saml2aws --version
+```	
+
+For more information about saml2aws installation, please check this [link](https://github.com/Versent/saml2aws).
 
 3. Configure a new IDP account (replace firstname and lastname with yours):
 
-
+```
 saml2aws configure \
   --idp-account tier-sandbox \
   --idp-provider=Okta \
@@ -66,6 +82,7 @@ saml2aws configure \
   --session-duration=7200 \
   --profile=TM-cross-account-admin \
   --region=eu-central-1
+```
 
 on Windows, replace '\' with ';'
 
