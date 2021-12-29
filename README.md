@@ -164,7 +164,7 @@
     docker-compose build --build-arg CODEARTIFACT_TOKEN=$CODEARTIFACT_TOKEN
     ```
 
-11. Run Docker containers
+11. Run Docker containers:
 
     ```
     docker-compose up
